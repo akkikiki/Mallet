@@ -102,6 +102,9 @@ public class PolylingualTopicModel implements Serializable {
 
 	static CommandOption.Double betaOption = new CommandOption.Double(PolylingualTopicModel.class, "beta", "DECIMAL", true, 0.01,
 		 "Beta parameter: smoothing over unigram distribution.",null);
+
+	static CommandOption.Integer numAlignedDocs = new CommandOption.Integer(PolylingualTopicModel.class, "num-aligned-docs", "INTEGER", true, 0,
+			"The number of aligned documents put into Polylingual Topic Model.", null);
 	
 	public class TopicAssignment implements Serializable {
 		public Instance[] instances;
@@ -563,8 +566,21 @@ public class PolylingualTopicModel implements Serializable {
 			// Loop over every document in the corpus
 			topicTermCount = betaTopicCount = smoothingOnlyCount = 0;
 
-			for (int doc = 0; doc < data.size(); doc++) {
+			// TODO: Only start sweeping the unaligned documents after N=1000? iterations
+			// To do so, I need the number of aligned documents beforehand
 
+			if (iterationsSoFar < 1000){
+				// Assuming the maxIterations is set to > 1000
+				System.out.println("Skipping unaglined doc for this iteration");
+				System.out.println("numAlignedDocs=" + numAlignedDocs.value);
+			}
+
+			for (int doc = 0; doc < data.size(); doc++) {
+				if (doc >= numAlignedDocs.value && iterationsSoFar < 1000){
+					// Assuming the maxIterations is set to > 1000
+//					System.out.println("Skipping unaglined doc for this iteration");
+					break;
+				}
 				sampleTopicsForOneDoc (data.get(doc),
 									   (iterationsSoFar >= burninPeriod &&
 										iterationsSoFar % saveSampleInterval == 0));
