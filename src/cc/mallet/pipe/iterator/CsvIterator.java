@@ -102,6 +102,9 @@ public class CsvIterator implements Iterator<Instance>
 		} else {
 			uri = uriStr;
 		}
+		System.out.println("uri=" + uri);
+		System.out.println(data);
+		System.out.println(target);
 		assert (data != null);
 		Instance carrier = new Instance (data, target, uri, null);
 		try {

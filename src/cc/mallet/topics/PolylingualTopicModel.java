@@ -105,6 +105,9 @@ public class PolylingualTopicModel implements Serializable {
 
 	static CommandOption.Integer numAlignedDocs = new CommandOption.Integer(PolylingualTopicModel.class, "num-aligned-docs", "INTEGER", true, 0,
 			"The number of aligned documents put into Polylingual Topic Model.", null);
+
+	static CommandOption.Integer numIncreBatch = new CommandOption.Integer(PolylingualTopicModel.class, "incremental", "INTEGER", true, 0,
+			"The batch size for adding one document.", null);
 	
 	public class TopicAssignment implements Serializable {
 		public Instance[] instances;
@@ -568,6 +571,8 @@ public class PolylingualTopicModel implements Serializable {
 
 			// TODO: Only start sweeping the unaligned documents after N=1000? iterations
 			// To do so, I need the number of aligned documents beforehand
+			int incrementalBatchSize = numIncreBatch.value; // adding 100 docs for each iteration
+			int scope = numAlignedDocs.value + Math.max(incrementalBatchSize * (iterationsSoFar - 1000), 0);
 
 			if (iterationsSoFar < 1000){
 				// Assuming the maxIterations is set to > 1000
@@ -581,6 +586,15 @@ public class PolylingualTopicModel implements Serializable {
 //					System.out.println("Skipping unaglined doc for this iteration");
 					break;
 				}
+
+				//	Incremental batching of documents set when numIncreBatch != 0
+				if (doc >= scope && numIncreBatch.value != 0) {
+					System.out.println("scope: " + scope);
+					System.out.println("breaking at doc #" + doc + " for this iteration");
+					break;
+
+				}
+
 				sampleTopicsForOneDoc (data.get(doc),
 									   (iterationsSoFar >= burninPeriod &&
 										iterationsSoFar % saveSampleInterval == 0));
