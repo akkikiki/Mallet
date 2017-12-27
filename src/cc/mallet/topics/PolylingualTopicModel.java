@@ -573,6 +573,9 @@ public class PolylingualTopicModel implements Serializable {
 			// To do so, I need the number of aligned documents beforehand
 			int incrementalBatchSize = numIncreBatch.value; // adding 100 docs for each iteration
 			int scope = numAlignedDocs.value + Math.max(incrementalBatchSize * (iterationsSoFar - 1000), 0);
+			if (numIncreBatch.value == 0) {
+				scope = data.size();
+			}
 
 			if (iterationsSoFar < 1000){
 				// Assuming the maxIterations is set to > 1000
