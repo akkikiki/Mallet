@@ -584,9 +584,10 @@ public class PolylingualTopicModel implements Serializable {
 			}
 
 			for (int doc = 0; doc < data.size(); doc++) {
+				System.out.println("doc num =" + doc);
 				if (doc >= numAlignedDocs.value && iterationsSoFar < 1000){
 					// Assuming the maxIterations is set to > 1000
-//					System.out.println("Skipping unaglined doc for this iteration");
+					System.out.println("Stop sampling for further docs...");
 					break;
 				}
 
