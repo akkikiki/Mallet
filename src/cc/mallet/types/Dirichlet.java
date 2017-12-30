@@ -596,12 +596,10 @@ Bernoulli numbers. */
 
 		int[] histogram;
 
-		StringBuffer out = new StringBuffer();
-
 		for (i=0; i<observations.length; i++) {
 			histogram = observations[i];
 
-			//StringBuffer out = new StringBuffer();
+			StringBuffer out = new StringBuffer();
 			for (k = 0; k < histogram.length; k++) {
 				if (histogram[k] > 0) {
 					nonZeroLimits[i] = k;
