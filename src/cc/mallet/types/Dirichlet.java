@@ -599,14 +599,14 @@ Bernoulli numbers. */
 		for (i=0; i<observations.length; i++) {
 			histogram = observations[i];
 
-			StringBuffer out = new StringBuffer();
+//			StringBuffer out = new StringBuffer();
 			for (k = 0; k < histogram.length; k++) {
 				if (histogram[k] > 0) {
 					nonZeroLimits[i] = k;
-					out.append(k + ":" + histogram[k] + " ");
+//					out.append(k + ":" + histogram[k] + " ");
 				}
 			}
-			System.out.println(out);
+//			System.out.println(out);
 		}
 
 		for (int iteration=0; iteration<numIterations; iteration++) {
@@ -646,6 +646,14 @@ Bernoulli numbers. */
 
 				// Bayesian estimation part II
 				parameters[k] = oldParametersK * (parameters[k] + shape) / denominator;
+
+				// Clipping parameters to avoid burst in alphas
+				if (parameters[k] > 0.5) {
+					parameters[k] = 0.5;
+				}
+				if (parameters[k] < 0.001) {
+					parameters[k] = 0.001;
+				}
 
 				parametersSum += parameters[k];
 			}
