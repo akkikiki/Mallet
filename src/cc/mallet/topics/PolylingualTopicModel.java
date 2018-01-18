@@ -575,6 +575,7 @@ public class PolylingualTopicModel implements Serializable {
 			if (incrementalBatchSize < data.size()) {
 				double temp = incrementalBatchSize * 1.01;
 				incrementalBatchSize = (int) temp;
+				System.out.println("BatchSize = " + incrementalBatchSize);
 			}
 
 //			int scope = numAlignedDocs.value + Math.max(incrementalBatchSize * (iterationsSoFar - 1000), 0);
