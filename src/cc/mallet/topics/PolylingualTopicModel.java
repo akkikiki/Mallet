@@ -579,7 +579,11 @@ public class PolylingualTopicModel implements Serializable {
 			}
 
 //			int scope = numAlignedDocs.value + Math.max(incrementalBatchSize * (iterationsSoFar - 1000), 0);
-			int scope = numAlignedDocs.value + Math.max(incrementalBatchSize * (iterationsSoFar - 1000), 0);
+			int scope = numAlignedDocs.value;
+
+			if (iterationsSoFar >= 1000) {
+				scope += incrementalBatchSize;
+			}
 			scope = Math.min(scope, data.size()); // Avoiding overflow
 			if (numIncreBatch.value == 0) {
 				System.out.println("Adding unaligned tweets at once");
