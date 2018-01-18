@@ -535,7 +535,8 @@ public class PolylingualTopicModel implements Serializable {
 		int maxIteration = iterationsSoFar + iterationsThisRound;
 
 		long totalTime = 0;
-	
+		int incrementalBatchSize = numIncreBatch.value;
+
 		for ( ; iterationsSoFar <= maxIteration; iterationsSoFar++) {
 			long iterationStart = System.currentTimeMillis();
 			
@@ -571,11 +572,17 @@ public class PolylingualTopicModel implements Serializable {
 
 			// TODO: Only start sweeping the unaligned documents after N=1000? iterations
 			// To do so, I need the number of aligned documents beforehand
-			int incrementalBatchSize = numIncreBatch.value; // adding 100 docs for each iteration
+			if (incrementalBatchSize < data.size()) {
+				double temp = incrementalBatchSize * 1.01;
+				incrementalBatchSize = (int) temp;
+			}
+
+//			int scope = numAlignedDocs.value + Math.max(incrementalBatchSize * (iterationsSoFar - 1000), 0);
 			int scope = numAlignedDocs.value + Math.max(incrementalBatchSize * (iterationsSoFar - 1000), 0);
 			scope = Math.min(scope, data.size()); // Avoiding overflow
 			if (numIncreBatch.value == 0) {
-				scope = data.size();
+				System.out.println("Adding unaligned tweets at once");
+				scope = data.size(); // making sure that batch setting works
 			}
 
 			if (iterationsSoFar < 1000){
