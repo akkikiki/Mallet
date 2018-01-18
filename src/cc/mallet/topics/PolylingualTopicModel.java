@@ -572,7 +572,7 @@ public class PolylingualTopicModel implements Serializable {
 
 			// TODO: Only start sweeping the unaligned documents after N=1000? iterations
 			// To do so, I need the number of aligned documents beforehand
-			if (incrementalBatchSize < data.size()) {
+			if (iterationsSoFar >= 1000 && incrementalBatchSize < data.size()) {
 				double temp = incrementalBatchSize * 1.01;
 				incrementalBatchSize = (int) temp;
 				System.out.println("BatchSize = " + incrementalBatchSize);
