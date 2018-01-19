@@ -546,6 +546,14 @@ public class PolylingualTopicModel implements Serializable {
 
 			}
 
+			if (iterationsSoFar % 10 == 0 && iterationsSoFar != 0) {
+				System.out.println("saving top words for iteration = " + iterationsSoFar);
+//				printTopWords (System.out, wordsPerTopic, false);
+				printTopWords(new File(topicKeysFile.value + "-" + iterationsSoFar + ".txt"), topWordsOption.value, false);
+
+
+			}
+
 			if (saveStateInterval != 0 && iterationsSoFar % saveStateInterval == 0) {
 				this.printState(new File(stateFilename + '.' + iterationsSoFar));
 			}
