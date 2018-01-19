@@ -648,8 +648,11 @@ Bernoulli numbers. */
 				parameters[k] = oldParametersK * (parameters[k] + shape) / denominator;
 
 				// Clipping parameters to avoid burst in alphas
-				if (parameters[k] > 0.5) {
-					parameters[k] = 0.5;
+//				if (parameters[k] > 0.5) {
+//					parameters[k] = 0.5;
+//				}
+                if (parameters[k] > 0.1) {
+					parameters[k] = 0.1;
 				}
 				if (parameters[k] < 0.001) {
 					parameters[k] = 0.001;
