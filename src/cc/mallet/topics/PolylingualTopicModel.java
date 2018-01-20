@@ -587,45 +587,45 @@ public class PolylingualTopicModel implements Serializable {
 
 			// TODO: Only start sweeping the unaligned documents after N=1000? iterations
 			// To do so, I need the number of aligned documents beforehand
-			if (iterationsSoFar >= 1000 && incrementalBatchSize < data.size()) {
-				double temp = incrementalBatchSize * 1.01;
-				incrementalBatchSize = (int) temp;
-				System.out.println("BatchSize = " + incrementalBatchSize);
-			}
+//			if (iterationsSoFar >= 1000 && incrementalBatchSize < data.size()) {
+//				double temp = incrementalBatchSize * 1.01;
+//				incrementalBatchSize = (int) temp;
+//				System.out.println("BatchSize = " + incrementalBatchSize);
+//			}
 
 //			int scope = numAlignedDocs.value + Math.max(incrementalBatchSize * (iterationsSoFar - 1000), 0);
-			int scope = numAlignedDocs.value;
+//			int scope = numAlignedDocs.value;
+//
+//			if (iterationsSoFar >= 1000) {
+//				scope += incrementalBatchSize;
+//			}
+//			scope = Math.min(scope, data.size()); // Avoiding overflow
+//			if (numIncreBatch.value == 0) {
+//				System.out.println("Adding unaligned tweets at once");
+//				scope = data.size(); // making sure that batch setting works
+//			}
 
-			if (iterationsSoFar >= 1000) {
-				scope += incrementalBatchSize;
-			}
-			scope = Math.min(scope, data.size()); // Avoiding overflow
-			if (numIncreBatch.value == 0) {
-				System.out.println("Adding unaligned tweets at once");
-				scope = data.size(); // making sure that batch setting works
-			}
-
-			if (iterationsSoFar < 1000){
-				// Assuming the maxIterations is set to > 1000
-				System.out.println("Skipping unaglined doc for this iteration");
-				System.out.println("numAlignedDocs=" + numAlignedDocs.value);
-			}
+//			if (iterationsSoFar < 1000){
+//				// Assuming the maxIterations is set to > 1000
+//				System.out.println("Skipping unaglined doc for this iteration");
+//				System.out.println("numAlignedDocs=" + numAlignedDocs.value);
+//			}
 
 			for (int doc = 0; doc < data.size(); doc++) {
 //				System.out.println("doc num =" + doc);
-				if (doc >= numAlignedDocs.value && iterationsSoFar < 1000){
-					// Assuming the maxIterations is set to > 1000
-					System.out.println("Stop sampling for further docs...");
-					break;
-				}
+//				if (doc >= numAlignedDocs.value && iterationsSoFar < 1000){
+//					// Assuming the maxIterations is set to > 1000
+//					System.out.println("Stop sampling for further docs...");
+//					break;
+//				}
 
 				//	Incremental batching of documents set when numIncreBatch != 0
-				if (doc >= scope && numIncreBatch.value != 0) {
-					System.out.println("scope: " + scope);
-					System.out.println("breaking at doc #" + doc + " for this iteration");
-					break;
-
-				}
+//				if (doc >= scope && numIncreBatch.value != 0) {
+//					System.out.println("scope: " + scope);
+//					System.out.println("breaking at doc #" + doc + " for this iteration");
+//					break;
+//
+//				}
 
 				sampleTopicsForOneDoc (data.get(doc),
 									   (iterationsSoFar >= burninPeriod &&
