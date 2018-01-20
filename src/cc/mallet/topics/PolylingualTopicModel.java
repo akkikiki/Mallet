@@ -224,6 +224,8 @@ public class PolylingualTopicModel implements Serializable {
 		this.alphaSum = alphaSum;
 		this.alpha = new double[numTopics];
 		Arrays.fill(alpha, alphaSum / numTopics);
+		alpha[0] = 1.0; // hard-coding
+		System.err.println("alphas set to : " + alpha);
 		this.random = random;
 		
 		formatter = NumberFormat.getInstance();
