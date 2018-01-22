@@ -223,7 +223,8 @@ public class PolylingualTopicModel implements Serializable {
 
 		this.alphaSum = alphaSum;
 		this.alpha = new double[numTopics];
-		Arrays.fill(alpha, alphaSum / numTopics);
+//		Arrays.fill(alpha, alphaSum / numTopics);
+		Arrays.fill(alpha, alphaSum);
 		alpha[0] = 1.0; // hard-coding
 		for (int i = 0; i < numTopics; i++) {
 			System.err.println("alphas set to : " + alpha[i]);
