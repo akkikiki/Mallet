@@ -1676,6 +1676,9 @@ public class PolylingualTopicModel implements Serializable {
 			topicModel.printDocumentTopicsForEachLang(out_pt, docTopicsThreshold.value, docTopicsMax.value, 2);
 
 			out.close();
+			out_en.close();
+			out_es.close();
+			out_pt.close();
 		}
 
 		if (inferencerFilename.value != null) {
