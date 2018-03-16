@@ -1203,37 +1203,96 @@ public class PolylingualTopicModel implements Serializable {
 			int totalLength = 0;
 
 			for (int language = 0; language < numLanguages; language++) {
-			
+
 				LabelSequence topicSequence = (LabelSequence) data.get(di).topicSequences[language];
 				int[] currentDocTopics = topicSequence.getFeatures();
-				
+
 				docLength = topicSequence.getLength();
 				totalLength += docLength;
-				
+
 				// Count up the tokens
 				for (int token=0; token < docLength; token++) {
 					topicCounts[ currentDocTopics[token] ]++;
 				}
 			}
-				
+
 			// And normalize
 			for (int topic = 0; topic < numTopics; topic++) {
 				sortedTopics[topic].set(topic, (float) topicCounts[topic] / totalLength);
 			}
-			
+
 			Arrays.sort(sortedTopics);
 
 			for (int i = 0; i < max; i++) {
 				if (sortedTopics[i].getWeight() < threshold) { break; }
-				
-				pw.print (sortedTopics[i].getID() + " " + 
-						  sortedTopics[i].getWeight() + " ");
+
+				pw.print (sortedTopics[i].getID() + " " +
+						sortedTopics[i].getWeight() + " ");
 			}
 			pw.print (" \n");
 
 			Arrays.fill(topicCounts, 0);
 		}
-		
+
+	}
+
+	/**
+	 *  @param pw          A print writer
+	 *  @param threshold   Only print topics with proportion greater than this number
+	 *  @param max         Print no more than this many topics
+	 */
+	public void printDocumentTopicsForEachLang (PrintWriter pw, double threshold, int max, int language_id)	{
+		pw.print ("#doc source topic proportion ...\n");
+		int docLength;
+		int[] topicCounts = new int[ numTopics ];
+
+		IDSorter[] sortedTopics = new IDSorter[ numTopics ];
+		for (int topic = 0; topic < numTopics; topic++) {
+			// Initialize the sorters with dummy values
+			sortedTopics[topic] = new IDSorter(topic, topic);
+		}
+
+		if (max < 0 || max > numTopics) {
+			max = numTopics;
+		}
+
+		for (int di = 0; di < data.size(); di++) {
+
+			pw.print (di); pw.print (' ');
+
+			int totalLength = 0;
+
+//			for (int language = 0; language < numLanguages; language++) {
+			LabelSequence topicSequence = (LabelSequence) data.get(di).topicSequences[language_id];
+			int[] currentDocTopics = topicSequence.getFeatures();
+
+			docLength = topicSequence.getLength();
+			totalLength += docLength;
+
+			// Count up the tokens
+			for (int token=0; token < docLength; token++) {
+				topicCounts[ currentDocTopics[token] ]++;
+//				}
+			}
+
+			// And normalize
+			for (int topic = 0; topic < numTopics; topic++) {
+				sortedTopics[topic].set(topic, (float) topicCounts[topic] / totalLength);
+			}
+
+			Arrays.sort(sortedTopics);
+
+			for (int i = 0; i < max; i++) {
+				if (sortedTopics[i].getWeight() < threshold) { break; }
+
+				pw.print (sortedTopics[i].getID() + " " +
+						sortedTopics[i].getWeight() + " ");
+			}
+			pw.print (" \n");
+
+			Arrays.fill(topicCounts, 0);
+		}
+
 	}
 	
 	public void printState (File f) throws IOException {
@@ -1606,6 +1665,16 @@ public class PolylingualTopicModel implements Serializable {
 		if (docTopicsFile.value != null) {
 			PrintWriter out = new PrintWriter (new FileWriter ((new File(docTopicsFile.value))));
 			topicModel.printDocumentTopics(out, docTopicsThreshold.value, docTopicsMax.value);
+
+			PrintWriter out_en = new PrintWriter (new FileWriter ((new File(docTopicsFile.value + ".en"))));
+			topicModel.printDocumentTopicsForEachLang(out_en, docTopicsThreshold.value, docTopicsMax.value, 0);
+
+			PrintWriter out_es = new PrintWriter (new FileWriter ((new File(docTopicsFile.value + ".es"))));
+			topicModel.printDocumentTopicsForEachLang(out_es, docTopicsThreshold.value, docTopicsMax.value, 1);
+
+			PrintWriter out_pt = new PrintWriter (new FileWriter ((new File(docTopicsFile.value + ".pt"))));
+			topicModel.printDocumentTopicsForEachLang(out_pt, docTopicsThreshold.value, docTopicsMax.value, 2);
+
 			out.close();
 		}
 
