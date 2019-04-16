@@ -306,6 +306,9 @@ public class PolylingualTopicModel implements Serializable {
 
 		HashSet[] stoplists = new HashSet[ numLanguages ];
 
+		for (int i = 0; i < numLanguages; i++) {
+			System.out.println("Lang" + i + " vocab/type = " + vocabularySizes[i]);
+		}
 		for (int language = 0; language < numLanguages; language++) {
 
 			if (training[language].size() != numInstances) {
